@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.dal.mapper.StructMapper">
+
+    <resultMap id="BaseResultMap" type="com.cm.dal.entity.StructDO">
+        <id column="id" property="id" javaType="java.lang.Long"/>
+        <result column="create_time" property="createTime" javaType="java.util.Date"/>
+        <result column="update_time" property="updateTime" javaType="java.util.Date"/>
+        <result column="struct_id" property="structId" javaType="java.lang.String"/>
+        <result column="contract_id" property="contractId" javaType="java.lang.String"/>
+        <result column="type" property="type" javaType="java.lang.Integer"/>
+        <result column="text" property="text" javaType="java.lang.String"/>
+        <result column="cooperation_id" property="cooperationId" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="insertField">
+        struct_id
+        , contract_id, type, text, cooperation_id
+    </sql>
+    <sql id="insertValue">
+        (#{struct.structId}, #{struct.contractId}, #{struct.type}, #{struct.text}, #{struct.cooperationId})
+    </sql>
+
+    <sql id="allField">
+        id
+        ,create_time, update_time, struct_id, contract_id, type, text, cooperation_id
+    </sql>
+
+    <insert id="insertBatch">
+        INSERT INTO struct(<include refid="insertField"/>)
+        VALUES
+        <foreach collection="list" item="struct" separator=",">
+            <include refid="insertValue"/>
+        </foreach>
+    </insert>
+
+    <update id="updateByStructId">
+        UPDATE struct
+        <set>
+            update_time = now(),
+            <if test="type != null">type = #{type},</if>
+            <if test="text != null and text != ''">text = #{text},</if>
+            <if test="cooperationId != null and cooperationId != ''">cooperation_id = #{cooperationId},</if>
+        </set>
+        WHERE struct_id = #{structId}
+
+    </update>
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT
+        <include refid="allField"/>
+        FROM struct
+        WHERE contract_id IN
+        <foreach collection="contractIds" item="contractId" open="(" separator="," close=")" nullable="true">
+            #{contractId}
+        </foreach>
+    </select>
+</mapper>

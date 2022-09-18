@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.dal.mapper.CooperationMapper">
+
+    <resultMap id="BaseResultMap" type="com.cm.dal.entity.CooperationDO">
+        <id column="id" property="id" javaType="java.lang.Long"/>
+        <result column="cooperation_id" property="cooperationId" javaType="java.lang.String"/>
+        <result column="type" property="type" javaType="java.lang.Integer"/>
+        <result column="sign_methods" property="signMethods" javaType="java.lang.String"/>
+        <result column="will_auth_methods" property="willAuthMethods" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="insertField">
+        cooperation_id
+        , type, sign_methods, will_auth_methods
+    </sql>
+    <sql id="insertValue">
+        (#{cooperation.cooperationId}, #{cooperation.type}, #{cooperation.signMethods}, #{cooperation.willAuthMethods})
+    </sql>
+
+    <sql id="allField">
+        id
+        , cooperation_id, type, sign_methods, will_auth_methods
+    </sql>
+
+    <insert id="insertBatch">
+        INSERT INTO cooperation(<include refid="insertField"/>)
+        VALUES
+        <foreach collection="cooperations" item="cooperation" separator=",">
+            <include refid="insertValue"/>
+        </foreach>
+    </insert>
+
+    <select id="list" resultMap="BaseResultMap">
+        <if test="cooperationIds != null and cooperationIds.size() > 0">
+            SELECT
+            <include refid="allField"/>
+            FROM cooperation
+            WHERE
+            cooperation_id IN
+            <foreach collection="cooperationIds" item="cooperationId" open="(" separator="," close=")">
+                #{cooperationId}
+            </foreach>
+        </if>
+    </select>
+</mapper>

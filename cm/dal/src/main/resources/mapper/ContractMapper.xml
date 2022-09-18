@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.dal.mapper.ContractMapper">
+
+    <resultMap id="BaseResultMap" type="com.cm.dal.entity.ContractDO">
+        <id column="id" property="id" javaType="java.lang.Long"/>
+        <result column="contract_id" property="contractId" javaType="java.lang.String"/>
+        <result column="file_id" property="fileId" javaType="java.lang.String"/>
+        <result column="tenant_id" property="tenantId" javaType="java.lang.String"/>
+        <result column="source_id" property="sourceId" javaType="java.lang.String"/>
+        <result column="source_type" property="sourceType" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <sql id="insertField">
+        contract_id
+        , file_id, tenant_id, source_id, source_type
+    </sql>
+    <sql id="insertValue">
+        (#{contract.contractId}, #{contract.fileId}, #{contract.tenantId}, #{contract.sourceId}, #{contract.sourceType})
+    </sql>
+
+    <sql id="allField">
+        id
+        , contract_id, file_id, tenant_id, source_id, source_type
+    </sql>
+
+    <insert id="insertBatch">
+        INSERT INTO contract(<include refid="insertField"/>)
+        VALUES
+        <foreach collection="list" item="contract" separator=",">
+            <include refid="insertValue"/>
+        </foreach>
+    </insert>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT
+        <include refid="allField"/>
+        FROM contract
+        WHERE contract_id = #{contractId}
+    </select>
+    <select id="selectByCondition" resultType="com.cm.dal.entity.ContractDO">
+        SELECT *
+        FROM contract
+        WHERE tenant_id = #{tenantId}
+        <choose>
+            <when test="id != null">AND contract_id = #{id}</when>
+            <when test="contractId != null and contractId != ''">AND contract_id = #{contractId}</when>
+            <when test="sourceId != null and sourceId != ''">AND source_id = #{sourceId}</when>
+            <when test="sourceType != null">AND source_type = #{sourceType}</when>
+        </choose>
+    </select>
+
+</mapper>

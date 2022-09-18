@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cm.dal.mapper.CooperatorMapper">
+
+    <resultMap id="BaseResultMap" type="com.cm.dal.entity.CooperatorDO">
+        <id column="id" property="id" javaType="java.lang.Long"/>
+        <result column="cooperator_id" property="cooperatorId" javaType="java.lang.String"/>
+        <result column="cooperation_id" property="cooperationId" javaType="java.lang.String"/>
+        <result column="user_id" property="userId" javaType="java.lang.Integer"/>
+        <result column="tenant_id" property="tenantId" javaType="java.lang.String"/>
+    </resultMap>
+
+    <sql id="insertField">
+        cooperator_id
+        , cooperation_id, user_id, tenant_id
+    </sql>
+    <sql id="insertValue">
+        (#{cooperator.cooperatorId}, #{cooperator.cooperationId}, #{cooperator.userId}, #{cooperator.tenantId})
+    </sql>
+
+    <sql id="allField">
+        id
+        , cooperator_id, cooperation_id, user_id, tenant_id
+    </sql>
+
+    <insert id="insertBatch">
+        INSERT INTO cooperator(<include refid="insertField"/>)
+        VALUES
+        <foreach collection="list" item="cooperator" separator=",">
+            <include refid="insertValue"/>
+        </foreach>
+    </insert>
+
+    <select id="list" resultMap="BaseResultMap">
+        SELECT
+        <include refid="allField"/>
+        FROM cooperator
+        WHERE cooperation_id = #{cooperationId}
+    </select>
+</mapper>
