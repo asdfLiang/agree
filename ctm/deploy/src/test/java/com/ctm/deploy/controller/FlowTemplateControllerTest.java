@@ -1,15 +1,10 @@
 package com.ctm.deploy.controller;
 
-import com.cm.client.enums.StructTypeEnum;
 import com.contract.common.tools.Json;
-import com.contract.common.tools.UUIDUtil;
+import com.contract.simpletest.annotation.JsonFileSource;
 import com.ctm.deploy.ContractTemplateApplication;
-import com.ctm.deploy.JsonFileSource;
 import com.ctm.deploy.vo.FlowTemplateVO;
-import com.ctm.model.biz.contract.Contract;
-import com.ctm.model.biz.contract.Struct;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,8 +14,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -34,32 +27,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class FlowTemplateControllerTest {
     @Autowired private MockMvc mockMvc;
 
-    private static Contract getContract() {
-        // 合同
-        Contract contract = new Contract();
-        contract.setFileId(UUIDUtil.getNonBreak());
-        contract.setTenantId(UUIDUtil.getNonBreak());
-
-        // 控件
-        Struct struct = new Struct();
-        struct.setStructId(UUIDUtil.getNonBreak());
-        struct.setType(StructTypeEnum.TEXT.getCode());
-
-        contract.setStructs(Collections.singletonList(struct));
-
-        return contract;
-    }
-
-    @Test
-    void testConfirmStructs() {}
-
-    void testGetFlowTemplate() {}
-
-    @ParameterizedTest
-    @JsonFileSource
     @Rollback
     @Transactional
-    @Test
+    @JsonFileSource
+    @ParameterizedTest
     void testCreateFlowTemplate(FlowTemplateVO createTemplateData) throws Exception {
 
         mockMvc.perform(

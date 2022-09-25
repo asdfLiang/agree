@@ -26,6 +26,7 @@
         <module>cpm</module>
         <module>cm</module>
         <module>cfm</module>
+        <module>testing</module>
     </modules>
 
     <dependencies>

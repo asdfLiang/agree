@@ -1,11 +1,10 @@
-package com.ctm.deploy;
+package com.contract.simpletest.annotation;
 
 import com.contract.common.tools.Json;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
-import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -18,7 +17,6 @@ import java.util.stream.Stream;
  * @author by liangzj
  * @since 2022/9/25 11:58
  */
-@Component
 public class JsonArgumentProvider implements ArgumentsProvider, AnnotationConsumer<JsonFileSource> {
 
     private JsonFileSource jsonFileSource;
@@ -29,14 +27,14 @@ public class JsonArgumentProvider implements ArgumentsProvider, AnnotationConsum
     }
 
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext)
-            throws Exception {
+    public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) {
         Method method = extensionContext.getRequiredTestMethod();
+        String className = method.getDeclaringClass().getSimpleName();
 
         // 获取对应的json文件
         InputStream in =
                 JsonFileSource.class.getResourceAsStream(
-                        String.format("/data/%s.json", method.getDeclaringClass().getSimpleName()));
+                        String.format("%s/%s.json", jsonFileSource.getPath(), className));
         Map dataMap = Json.parse(in, Map.class);
 
         // 获取每个参数的值
@@ -47,9 +45,9 @@ public class JsonArgumentProvider implements ArgumentsProvider, AnnotationConsum
     /**
      * 获取参数值
      *
-     * @param dataMap
-     * @param name
-     * @param classType
+     * @param dataMap 当前测试类包含的说有数据
+     * @param name 数据名称
+     * @param classType 数据类型
      * @return
      */
     private Arguments getArgument(Map dataMap, String name, Class classType) {

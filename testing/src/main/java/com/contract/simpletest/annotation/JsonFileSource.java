@@ -1,4 +1,4 @@
-package com.ctm.deploy;
+package com.contract.simpletest.annotation;
 /**
  * @author by liangzj
  * @since 2022/9/25 12:53
@@ -15,4 +15,6 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 @Documented
 @API(status = EXPERIMENTAL, since = "5.0")
 @ArgumentsSource(JsonArgumentProvider.class)
-public @interface JsonFileSource {}
+public @interface JsonFileSource {
+    String getPath() default "/data";
+}
