@@ -1,0 +1,59 @@
+{
+  "createTemplateData": {
+    "title": "单测新增模板",
+    "contracts": [
+      {
+        "contractId": null,
+        "fileId": "134ba1e49b29465aaec9ba5135d81bab",
+        "tenantId": "e909b8e1a6c6406f94f39688d90dc647",
+        "structs": [
+          {
+            "structId": "a3c9baedafba46e8a29727ebe10f1f5d",
+            "contractId": null,
+            "cooperationId": null,
+            "type": 1,
+            "text": null
+          }
+        ]
+      }
+    ],
+    "cooperations": [
+      {
+        "cooperators": [
+          {
+            "cooperationId": "32fce30534c04e40becc1b46b8ab2bf0",
+            "userId": "b735dfe36d6e48efa82602607692799a",
+            "tenantId": "8827c630a6e34342a7c58de7409b228e",
+            "accountType": 1
+          }
+        ],
+        "cooperationId": null,
+        "type": 1,
+        "signMethods": [
+          1
+        ],
+        "willAuthMethods": [
+          1,
+          2,
+          3
+        ],
+        "structs": [
+          {
+            "structId": "a3c9baedafba46e8a29727ebe10f1f5d",
+            "contractId": null,
+            "cooperationId": null,
+            "type": 1,
+            "text": null
+          }
+        ]
+      }
+    ],
+    "ccAccounts": null,
+    "visibleAccounts": null,
+    "config": {
+      "secret": 1,
+      "expireDate": null,
+      "signDeadLine": null
+    }
+  }
+}

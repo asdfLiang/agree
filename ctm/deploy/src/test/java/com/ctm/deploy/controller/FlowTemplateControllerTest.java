@@ -1,26 +1,25 @@
 package com.ctm.deploy.controller;
 
-import com.alibaba.fastjson2.JSON;
-import com.cm.client.enums.CooperationTypeEnum;
 import com.cm.client.enums.StructTypeEnum;
+import com.contract.common.tools.Json;
 import com.contract.common.tools.UUIDUtil;
 import com.ctm.deploy.ContractTemplateApplication;
+import com.ctm.deploy.JsonFileSource;
 import com.ctm.deploy.vo.FlowTemplateVO;
-import com.ctm.model.biz.FlowTemplateConfig;
 import com.ctm.model.biz.contract.Contract;
-import com.ctm.model.biz.contract.Cooperation;
 import com.ctm.model.biz.contract.Struct;
-import com.ctm.model.biz.participant.Cooperator;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -52,44 +51,22 @@ class FlowTemplateControllerTest {
     }
 
     @Test
-    void testCreateFlowTemplate() throws Exception {
-        FlowTemplateVO vo = new FlowTemplateVO();
-        Contract contract = getContract();
+    void testConfirmStructs() {}
 
-        FlowTemplateConfig config = new FlowTemplateConfig();
-        config.setSecret(1);
+    void testGetFlowTemplate() {}
 
-        vo.setTitle("单测新增模板");
-        vo.setContracts(Collections.singletonList(contract));
-        vo.setConfig(config);
-
-        // 协作方
-        Cooperation cooperation = new Cooperation();
-        cooperation.setType(CooperationTypeEnum.USER.getCode());
-        cooperation.setSignMethods(Collections.singletonList(1));
-        cooperation.setWillAuthMethods(Arrays.asList(1, 2, 3));
-        cooperation.setStructs(contract.getStructs());
-
-        // 添加协作者
-        Cooperator cooperator = new Cooperator();
-        cooperator.setCooperationId(UUIDUtil.getNonBreak());
-        cooperator.setUserId(UUIDUtil.getNonBreak());
-        cooperator.setTenantId(UUIDUtil.getNonBreak());
-        cooperator.setAccountType(1);
-        cooperation.setCooperators(Collections.singletonList(cooperator));
-
-        vo.setCooperations(Collections.singletonList(cooperation));
+    @ParameterizedTest
+    @JsonFileSource
+    @Rollback
+    @Transactional
+    @Test
+    void testCreateFlowTemplate(FlowTemplateVO createTemplateData) throws Exception {
 
         mockMvc.perform(
                         MockMvcRequestBuilders.post("/flow-template/create")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(JSON.toJSONString(vo)))
-                .andDo(result -> log.info("{}", result.getResponse()))
+                                .content(Json.from(createTemplateData)))
+                .andDo(result -> log.info("{}", result.getResponse().getContentAsString()))
                 .andExpect(jsonPath("$.success").value(true));
     }
-
-    @Test
-    void testConfirmStructs() {}
-
-    void testGetFlowTemplate() {}
 }

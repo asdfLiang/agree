@@ -1,11 +1,11 @@
 package com.cm.client;
 
-import com.alibaba.fastjson2.JSON;
 import com.cm.client.enums.StructTypeEnum;
 import com.cm.client.service.ContractClient;
 import com.cm.deploy.ContractManagerApplication;
 import com.cm.model.dto.contract.ContractDTO;
 import com.cm.model.dto.contract.StructDTO;
+import com.contract.common.tools.Json;
 import com.contract.common.tools.UUIDUtil;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,6 @@ public class ContractClientTest {
 
     @Test
     void testSelect() {
-        System.out.println(
-                JSON.toJSONString(contractClient.get("e0bbbb5f50484d54a0032665e97994b7")));
+        System.out.println(Json.from(contractClient.get("e0bbbb5f50484d54a0032665e97994b7")));
     }
 }
